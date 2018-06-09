@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    {{#each Post}}
+    <div>
+        {{this.author_fname}} {{this.author_lname}}
+        {{this.time}}
+        <p>
+            {{this.content}}
+            <ul style="list-style-type:none">
+            {{#each comment_arr}}
+                <li>
+                {{this}}
+                </li>
+                {{/each}}
+            </ul>
+        </p>
+        <form id = "addComment" action = "/{{this.id}}" method = "POST">
+            <legend>Add Comment</legend>
+            <textarea rows = "2" cols = "15" name = "content" wrap = "soft"></textarea>
+            <br>
+            <input id = "sub_comment" type = "submit" value = "Add Comment">
+        </form>
+        <form id = "deletePost">
+            <input id = "del_button" type = "submit" value = "Delete Post" onclick = "delete_post({{this.id}});">
+        </form> 
+    </div>
+    {{/each}}
+    <br>
+    <br>
+    <form id = "addPost" action = "/" method = "POST">
+        <legend>Add Post</legend>
+        <input name = "fname" type = "hidden" value = "John">
+        <input name = "lname" type = "hidden" value = "Smith">
+       
+        <textarea rows = "4" cols = "20" name = "content" wrap = "soft"></textarea>
+        <br>
+        <input id = "submit" type = "submit" value = "Submit Post">    
+    </form>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script> 
+    function delete_post(id){
+	console.log('preparing to delete post: ' + id);
+	$.ajax({
+		url: '/' + id,
+		type: 'DELETE',
+		success: function(result){
+			window.location.reload(true);
+		}
+	});
+}</script>
+</html>
